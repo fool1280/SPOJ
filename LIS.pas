@@ -1,10 +1,10 @@
 const fi='';
       fo='';
 var f,g:text;
-    n,res:integer;
-    a,h:array[0..30000] of longint;
+    n,res:longint;
+    a,h:array[1..30000] of longint;
 procedure Doc;
-var i:integer;
+var i:longint;
 begin
         assign(f,fi);
         reset(f);
@@ -12,13 +12,15 @@ begin
         for i:=1 to n do read(f,a[i]);
         close(f);
 end;
-procedure XuLi;
-var i,dau,cuoi,giua:integer;
+procedure LIS;
+var i,l,r,mid:longint;
 begin
-        h[1]:=1;
         res:=1;
+        h[1]:=1;
         for i:=2 to n do
         begin
+                if a[i]<a[h[1]] then h[1]:=i
+                else
                 if a[i]>a[h[res]] then
                 begin
                         inc(res);
@@ -26,14 +28,22 @@ begin
                 end
                 else
                 begin
-                        dau:=1;
-                        cuoi:=res;
-                        while dau<cuoi do
+                        l:=1;
+                        r:=res;
+                        //tim cuc phai a[h[mid]]
+                        {while l<>r do
                         begin
-                                giua:=(dau+cuoi) div 2;
-                                if a[h[giua]]<a[i] then dau:=giua+1 else cuoi:=giua;
+                                mid:=(l+r+1) div 2;
+                                if a[i]>a[h[mid]] then l:=mid else r:=mid-1;
                         end;
-                        h[dau]:=i;
+                        mid:=l;
+                        if (a[i]>a[h[mid]]) and (a[i]<a[h[mid+1]]) then h[mid+1]:=i;}
+                        //tim cuc trai a[i]
+                        repeat
+                                mid:=(l+r) div 2;
+                                if a[i]>a[h[mid]] then l:=mid+1 else r:=mid;
+                        until l=r;
+                        h[l]:=i;
                 end;
         end;
         assign(g,fo);
@@ -43,5 +53,5 @@ begin
 end;
 begin
         Doc;
-        XuLi;
+        LIS;
 end.
